@@ -312,6 +312,7 @@ export const ConfigPage: React.FC = () => {
         </div>
         <button
           onClick={() => handleOpenForm()}
+          testId="config-add-btn"
           className="flex items-center justify-center gap-2 rounded-lg bg-purple-600 hover:bg-purple-500 px-4 py-2 text-sm font-medium text-white shadow-lg shadow-purple-500/25 hover:shadow-purple-500/35 transition-all self-start sm:self-auto"
         >
           <Plus size={16} />
@@ -335,6 +336,7 @@ export const ConfigPage: React.FC = () => {
                 setActiveTab(tab.id as TabType);
                 setSearchQuery('');
               }}
+              testId={`config-tab-${tab.id}`}
               className={`flex items-center gap-2 border-b-2 px-4 py-3 text-sm font-medium transition-all whitespace-nowrap -mb-px ${
                 activeTab === tab.id
                   ? 'border-purple-500 text-purple-400 bg-purple-500/5'
@@ -361,6 +363,7 @@ export const ConfigPage: React.FC = () => {
           placeholder={`Search ${activeTab}...`}
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
+          testId="config-search-input"
           className="w-full rounded-lg border border-[#1a1c23] bg-[#0c0d12]/50 py-2 pl-9 pr-4 text-sm text-white placeholder-gray-500 backdrop-blur-sm transition-all focus:border-purple-500/40 focus:outline-none"
         />
       </div>
@@ -446,6 +449,7 @@ export const ConfigPage: React.FC = () => {
                       <td className="whitespace-nowrap px-6 py-3.5 text-right text-xs font-medium space-x-1.5">
                         <button
                           onClick={() => handleOpenForm(row)}
+                          testId={`config-edit-btn-${row.code}`}
                           className="rounded p-1 hover:bg-[#1a1c23] hover:text-white"
                           title="Edit"
                         >
@@ -453,6 +457,7 @@ export const ConfigPage: React.FC = () => {
                         </button>
                         <button
                           onClick={() => row.id && handleDelete(row.id, row.code)}
+                          testId={`config-delete-btn-${row.code}`}
                           className="rounded p-1 hover:bg-[#2e1518] hover:text-red-400"
                           title="Soft Delete"
                         >
@@ -489,6 +494,7 @@ export const ConfigPage: React.FC = () => {
                       <td className="whitespace-nowrap px-6 py-3.5 text-right text-xs font-medium space-x-1.5">
                         <button
                           onClick={() => handleOpenForm(row)}
+                          testId={`config-edit-btn-${row.code}`}
                           className="rounded p-1 hover:bg-[#1a1c23] hover:text-white"
                           title="Edit"
                         >
@@ -496,6 +502,7 @@ export const ConfigPage: React.FC = () => {
                         </button>
                         <button
                           onClick={() => row.id && handleDelete(row.id, row.code)}
+                          testId={`config-delete-btn-${row.code}`}
                           className="rounded p-1 hover:bg-[#2e1518] hover:text-red-400"
                           title="Soft Delete"
                         >
@@ -533,6 +540,7 @@ export const ConfigPage: React.FC = () => {
                       <td className="whitespace-nowrap px-6 py-3.5 text-right text-xs font-medium space-x-1.5">
                         <button
                           onClick={() => handleOpenForm(row)}
+                          testId={`config-edit-btn-${row.code}`}
                           className="rounded p-1 hover:bg-[#1a1c23] hover:text-white"
                           title="Edit"
                         >
@@ -540,6 +548,7 @@ export const ConfigPage: React.FC = () => {
                         </button>
                         <button
                           onClick={() => row.id && handleDelete(row.id, row.code)}
+                          testId={`config-delete-btn-${row.code}`}
                           className="rounded p-1 hover:bg-[#2e1518] hover:text-red-400"
                           title="Soft Delete"
                         >
@@ -577,6 +586,7 @@ export const ConfigPage: React.FC = () => {
                       <td className="whitespace-nowrap px-6 py-3.5 text-right text-xs font-medium space-x-1.5">
                         <button
                           onClick={() => handleOpenForm(row)}
+                          testId={`config-edit-btn-${row.parent_value_code}-${row.child_value_code}`}
                           className="rounded p-1 hover:bg-[#1a1c23] hover:text-white"
                           title="Edit"
                         >
@@ -584,6 +594,7 @@ export const ConfigPage: React.FC = () => {
                         </button>
                         <button
                           onClick={() => row.id && handleDelete(row.id, `${row.parent_value_code} -> ${row.child_value_code}`)}
+                          testId={`config-delete-btn-${row.parent_value_code}-${row.child_value_code}`}
                           className="rounded p-1 hover:bg-[#2e1518] hover:text-red-400"
                           title="Soft Delete"
                         >
@@ -611,6 +622,7 @@ export const ConfigPage: React.FC = () => {
                 </h3>
                 <button
                   onClick={() => setIsSlideOverOpen(false)}
+                  testId="config-drawer-close-btn"
                   className="rounded-lg p-1 text-gray-400 hover:bg-[#1a1c23] hover:text-white"
                 >
                   <X size={18} />
@@ -622,7 +634,7 @@ export const ConfigPage: React.FC = () => {
                 {/* Modules Form */}
                 {activeTab === 'modules' && (
                   <form onSubmit={hModule(onSubmit)} className="space-y-4">
-                    <div>
+                     <div>
                       <label className="block text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1.5">
                         Module Code
                       </label>
@@ -630,6 +642,7 @@ export const ConfigPage: React.FC = () => {
                         type="text"
                         disabled={!!editingRecord}
                         {...regModule('code')}
+                        testId="module-form-code-input"
                         placeholder="e.g. finance"
                         className="w-full rounded-lg border border-[#1a1c23] bg-[#13151a] px-3 py-2 text-sm text-white placeholder-gray-600 focus:border-purple-500/40 focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed"
                       />
@@ -642,6 +655,7 @@ export const ConfigPage: React.FC = () => {
                       <input
                         type="text"
                         {...regModule('name')}
+                        testId="module-form-name-input"
                         placeholder="e.g. Finance Module"
                         className="w-full rounded-lg border border-[#1a1c23] bg-[#13151a] px-3 py-2 text-sm text-white placeholder-gray-600 focus:border-purple-500/40 focus:outline-none"
                       />
@@ -653,6 +667,7 @@ export const ConfigPage: React.FC = () => {
                       </label>
                       <textarea
                         {...regModule('description')}
+                        testId="module-form-desc-input"
                         placeholder="Detail the modules capabilities..."
                         rows={3}
                         className="w-full rounded-lg border border-[#1a1c23] bg-[#13151a] px-3 py-2 text-sm text-white placeholder-gray-600 focus:border-purple-500/40 focus:outline-none resize-none"
@@ -664,6 +679,7 @@ export const ConfigPage: React.FC = () => {
                         type="checkbox"
                         id="m_active"
                         {...regModule('is_active')}
+                        testId="module-form-active-checkbox"
                         className="rounded border-[#1a1c23] bg-[#13151a] text-purple-600 focus:ring-0"
                       />
                       <label htmlFor="m_active" className="text-sm text-gray-300">
@@ -675,12 +691,14 @@ export const ConfigPage: React.FC = () => {
                       <button
                         type="button"
                         onClick={() => setIsSlideOverOpen(false)}
+                        testId="config-drawer-cancel-btn"
                         className="rounded-lg border border-[#1a1c23] hover:bg-[#13151a] px-4 py-2 text-sm text-gray-400 hover:text-white"
                       >
                         Cancel
                       </button>
                       <button
                         type="submit"
+                        testId="config-drawer-submit-btn"
                         className="rounded-lg bg-purple-600 hover:bg-purple-500 px-4 py-2 text-sm font-medium text-white shadow-lg shadow-purple-500/25"
                       >
                         {editingRecord ? 'Save Changes' : 'Create Module'}
@@ -700,6 +718,7 @@ export const ConfigPage: React.FC = () => {
                         type="text"
                         disabled={!!editingRecord}
                         {...regType('code')}
+                        testId="type-form-code-input"
                         placeholder="e.g. status"
                         className="w-full rounded-lg border border-[#1a1c23] bg-[#13151a] px-3 py-2 text-sm text-white placeholder-gray-600 focus:border-purple-500/40 focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed"
                       />
@@ -711,6 +730,7 @@ export const ConfigPage: React.FC = () => {
                       </label>
                       <select
                         {...regType('module_code')}
+                        testId="type-form-module-select"
                         className="w-full rounded-lg border border-[#1a1c23] bg-[#13151a] px-3 py-2 text-sm text-white focus:border-purple-500/40 focus:outline-none"
                       >
                         <option value="">Select a Module</option>
@@ -729,6 +749,7 @@ export const ConfigPage: React.FC = () => {
                       <input
                         type="text"
                         {...regType('name')}
+                        testId="type-form-name-input"
                         placeholder="e.g. Standard Status"
                         className="w-full rounded-lg border border-[#1a1c23] bg-[#13151a] px-3 py-2 text-sm text-white placeholder-gray-600 focus:border-purple-500/40 focus:outline-none"
                       />
@@ -740,6 +761,7 @@ export const ConfigPage: React.FC = () => {
                       </label>
                       <textarea
                         {...regType('description')}
+                        testId="type-form-desc-input"
                         placeholder="Operational configuration classification..."
                         rows={3}
                         className="w-full rounded-lg border border-[#1a1c23] bg-[#13151a] px-3 py-2 text-sm text-white placeholder-gray-600 focus:border-purple-500/40 focus:outline-none resize-none"
@@ -751,6 +773,7 @@ export const ConfigPage: React.FC = () => {
                         type="checkbox"
                         id="t_active"
                         {...regType('is_active')}
+                        testId="type-form-active-checkbox"
                         className="rounded border-[#1a1c23] bg-[#13151a] text-purple-600 focus:ring-0"
                       />
                       <label htmlFor="t_active" className="text-sm text-gray-300">
@@ -762,12 +785,14 @@ export const ConfigPage: React.FC = () => {
                       <button
                         type="button"
                         onClick={() => setIsSlideOverOpen(false)}
+                        testId="config-drawer-cancel-btn"
                         className="rounded-lg border border-[#1a1c23] hover:bg-[#13151a] px-4 py-2 text-sm text-gray-400 hover:text-white"
                       >
                         Cancel
                       </button>
                       <button
                         type="submit"
+                        testId="config-drawer-submit-btn"
                         className="rounded-lg bg-purple-600 hover:bg-purple-500 px-4 py-2 text-sm font-medium text-white shadow-lg shadow-purple-500/25"
                       >
                         {editingRecord ? 'Save Changes' : 'Create Type'}
@@ -787,6 +812,7 @@ export const ConfigPage: React.FC = () => {
                         type="text"
                         disabled={!!editingRecord}
                         {...regValue('code')}
+                        testId="value-form-code-input"
                         placeholder="e.g. ACTIVE"
                         className="w-full rounded-lg border border-[#1a1c23] bg-[#13151a] px-3 py-2 text-sm text-white placeholder-gray-600 focus:border-purple-500/40 focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed"
                       />
@@ -798,6 +824,7 @@ export const ConfigPage: React.FC = () => {
                       </label>
                       <select
                         {...regValue('type_code')}
+                        testId="value-form-type-select"
                         className="w-full rounded-lg border border-[#1a1c23] bg-[#13151a] px-3 py-2 text-sm text-white focus:border-purple-500/40 focus:outline-none"
                       >
                         <option value="">Select a Type</option>
@@ -816,6 +843,7 @@ export const ConfigPage: React.FC = () => {
                       <input
                         type="text"
                         {...regValue('value')}
+                        testId="value-form-value-input"
                         placeholder="e.g. Active Record"
                         className="w-full rounded-lg border border-[#1a1c23] bg-[#13151a] px-3 py-2 text-sm text-white placeholder-gray-600 focus:border-purple-500/40 focus:outline-none"
                       />
@@ -827,6 +855,7 @@ export const ConfigPage: React.FC = () => {
                       </label>
                       <textarea
                         {...regValue('description')}
+                        testId="value-form-desc-input"
                         placeholder="Operational details for value code..."
                         rows={3}
                         className="w-full rounded-lg border border-[#1a1c23] bg-[#13151a] px-3 py-2 text-sm text-white placeholder-gray-600 focus:border-purple-500/40 focus:outline-none resize-none"
@@ -840,6 +869,7 @@ export const ConfigPage: React.FC = () => {
                       <input
                         type="number"
                         {...regValue('display_order', { valueAsNumber: true })}
+                        testId="value-form-order-input"
                         placeholder="e.g. 1"
                         className="w-full rounded-lg border border-[#1a1c23] bg-[#13151a] px-3 py-2 text-sm text-white placeholder-gray-600 focus:border-purple-500/40 focus:outline-none"
                       />
@@ -850,6 +880,7 @@ export const ConfigPage: React.FC = () => {
                         type="checkbox"
                         id="v_active"
                         {...regValue('is_active')}
+                        testId="value-form-active-checkbox"
                         className="rounded border-[#1a1c23] bg-[#13151a] text-purple-600 focus:ring-0"
                       />
                       <label htmlFor="v_active" className="text-sm text-gray-300">
@@ -861,12 +892,14 @@ export const ConfigPage: React.FC = () => {
                       <button
                         type="button"
                         onClick={() => setIsSlideOverOpen(false)}
+                        testId="config-drawer-cancel-btn"
                         className="rounded-lg border border-[#1a1c23] hover:bg-[#13151a] px-4 py-2 text-sm text-gray-400 hover:text-white"
                       >
                         Cancel
                       </button>
                       <button
                         type="submit"
+                        testId="config-drawer-submit-btn"
                         className="rounded-lg bg-purple-600 hover:bg-purple-500 px-4 py-2 text-sm font-medium text-white shadow-lg shadow-purple-500/25"
                       >
                         {editingRecord ? 'Save Changes' : 'Create Value'}
@@ -878,12 +911,13 @@ export const ConfigPage: React.FC = () => {
                 {/* Dependencies Form */}
                 {activeTab === 'dependencies' && (
                   <form onSubmit={hDep(onSubmit)} className="space-y-4">
-                    <div>
+                     <div>
                       <label className="block text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1.5">
                         Parent Value Code
                       </label>
                       <select
                         {...regDep('parent_value_code')}
+                        testId="dep-form-parent-select"
                         className="w-full rounded-lg border border-[#1a1c23] bg-[#13151a] px-3 py-2 text-sm text-white focus:border-purple-500/40 focus:outline-none"
                       >
                         <option value="">Select Parent Value</option>
@@ -901,6 +935,7 @@ export const ConfigPage: React.FC = () => {
                       </label>
                       <select
                         {...regDep('child_value_code')}
+                        testId="dep-form-child-select"
                         className="w-full rounded-lg border border-[#1a1c23] bg-[#13151a] px-3 py-2 text-sm text-white focus:border-purple-500/40 focus:outline-none"
                       >
                         <option value="">Select Child Value</option>
@@ -919,6 +954,7 @@ export const ConfigPage: React.FC = () => {
                       <input
                         type="text"
                         {...regDep('dependency_type')}
+                        testId="dep-form-type-input"
                         placeholder="e.g. REQUIRES"
                         className="w-full rounded-lg border border-[#1a1c23] bg-[#13151a] px-3 py-2 text-sm text-white placeholder-gray-600 focus:border-purple-500/40 focus:outline-none"
                       />
@@ -929,6 +965,7 @@ export const ConfigPage: React.FC = () => {
                         type="checkbox"
                         id="d_active"
                         {...regDep('is_active')}
+                        testId="dep-form-active-checkbox"
                         className="rounded border-[#1a1c23] bg-[#13151a] text-purple-600 focus:ring-0"
                       />
                       <label htmlFor="d_active" className="text-sm text-gray-300">
@@ -940,12 +977,14 @@ export const ConfigPage: React.FC = () => {
                       <button
                         type="button"
                         onClick={() => setIsSlideOverOpen(false)}
+                        testId="config-drawer-cancel-btn"
                         className="rounded-lg border border-[#1a1c23] hover:bg-[#13151a] px-4 py-2 text-sm text-gray-400 hover:text-white"
                       >
                         Cancel
                       </button>
                       <button
                         type="submit"
+                        testId="config-drawer-submit-btn"
                         className="rounded-lg bg-purple-600 hover:bg-purple-500 px-4 py-2 text-sm font-medium text-white shadow-lg shadow-purple-500/25"
                       >
                         {editingRecord ? 'Save Changes' : 'Create Dependency'}

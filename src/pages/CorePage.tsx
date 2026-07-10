@@ -573,6 +573,7 @@ export const CorePage: React.FC = () => {
         </div>
         <button
           onClick={handleOpenOnboard}
+          testId="core-onboard-btn"
           className="flex items-center justify-center gap-2 rounded-lg bg-indigo-600 hover:bg-indigo-500 px-4 py-2 text-sm font-medium text-white shadow-lg shadow-indigo-500/25 hover:shadow-indigo-500/35 transition-all self-start sm:self-auto"
         >
           <Plus size={16} />
@@ -594,6 +595,7 @@ export const CorePage: React.FC = () => {
               placeholder="Filter entities by name, type, or tags..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
+              testId="core-search-input"
               className="w-full rounded-lg border border-[#1a1c23] bg-[#0c0d12]/50 py-2 pl-9 pr-4 text-sm text-white placeholder-gray-500 backdrop-blur-sm transition-all focus:border-indigo-500/40 focus:outline-none"
             />
           </div>
@@ -626,6 +628,7 @@ export const CorePage: React.FC = () => {
                       <tr
                         key={row.id}
                         onClick={() => row.id && setSelectedEntityId(row.id)}
+                        testId={`core-entity-row-${row.id}`}
                         className={`cursor-pointer transition-colors ${
                           selectedEntityId === row.id
                             ? 'bg-indigo-600/10 text-indigo-300'
@@ -656,6 +659,7 @@ export const CorePage: React.FC = () => {
                         <td className="whitespace-nowrap px-6 py-3.5 text-right text-xs font-medium" onClick={(e) => e.stopPropagation()}>
                           <button
                             onClick={() => row.id && handleDeleteEntity(row.id, row.name)}
+                            testId={`core-entity-delete-btn-${row.id}`}
                             className="rounded p-1 hover:bg-[#2e1518] hover:text-red-400"
                             title="Delete Entity"
                           >
@@ -701,6 +705,7 @@ export const CorePage: React.FC = () => {
                 </div>
                 <button
                   onClick={() => setSelectedEntityId(null)}
+                  testId="core-detail-close-btn"
                   className="rounded bg-[#1a1c23] p-1 text-gray-400 hover:text-white hover:bg-gray-800"
                 >
                   <X size={12} />
@@ -782,6 +787,7 @@ export const CorePage: React.FC = () => {
                   </h4>
                   <button
                     onClick={() => handleOpenAddSubItem('primaryContact')}
+                    testId="core-detail-add-primary-contact-btn"
                     className="text-2xs font-semibold text-indigo-400 hover:text-indigo-300 flex items-center gap-0.5"
                   >
                     <Plus size={10} /> Link
@@ -807,6 +813,7 @@ export const CorePage: React.FC = () => {
                         </div>
                         <button
                           onClick={() => pc.id && handleDeletePrimaryContact(pc.id)}
+                          testId={`core-detail-delete-primary-contact-btn-${pc.id}`}
                           className="hidden group-hover/card:block text-gray-500 hover:text-red-400 rounded hover:bg-gray-800 p-0.5"
                           title="Remove link"
                         >
@@ -827,6 +834,7 @@ export const CorePage: React.FC = () => {
                   </h4>
                   <button
                     onClick={() => handleOpenAddSubItem('address')}
+                    testId="core-detail-add-address-btn"
                     className="text-2xs font-semibold text-indigo-400 hover:text-indigo-300 flex items-center gap-0.5"
                   >
                     <Plus size={10} /> Add
@@ -843,6 +851,7 @@ export const CorePage: React.FC = () => {
                       >
                         <button
                           onClick={() => addr.id && handleDeleteAddress(addr.id, selectedDetails.isPerson)}
+                          testId={`core-detail-delete-address-btn-${addr.id}`}
                           className="absolute top-2 right-2 hidden group-hover/card:block text-gray-500 hover:text-red-400 rounded hover:bg-gray-800 p-0.5"
                           title="Remove address"
                         >
@@ -878,6 +887,7 @@ export const CorePage: React.FC = () => {
                   </h4>
                   <button
                     onClick={() => handleOpenAddSubItem('contact')}
+                    testId="core-detail-add-contact-btn"
                     className="text-2xs font-semibold text-indigo-400 hover:text-indigo-300 flex items-center gap-0.5"
                   >
                     <Plus size={10} /> Add
@@ -909,6 +919,7 @@ export const CorePage: React.FC = () => {
                           )}
                           <button
                             onClick={() => contact.id && handleDeleteContact(contact.id, selectedDetails.isPerson)}
+                            testId={`core-detail-delete-contact-btn-${contact.id}`}
                             className="hidden group-hover/card:block text-gray-500 hover:text-red-400 rounded hover:bg-gray-800 p-0.5"
                             title="Remove contact"
                           >
@@ -930,6 +941,7 @@ export const CorePage: React.FC = () => {
                   </h4>
                   <button
                     onClick={() => handleOpenAddSubItem('relationship')}
+                    testId="core-detail-add-relationship-btn"
                     className="text-2xs font-semibold text-indigo-400 hover:text-indigo-300 flex items-center gap-0.5"
                   >
                     <Plus size={10} /> Link
@@ -957,6 +969,7 @@ export const CorePage: React.FC = () => {
                         </div>
                         <button
                           onClick={() => rel.id && handleDeleteRelationship(rel.id)}
+                          testId={`core-detail-delete-relationship-btn-${rel.id}`}
                           className="hidden group-hover/card:block text-gray-500 hover:text-red-400 rounded hover:bg-gray-800 p-0.5"
                           title="Remove link"
                         >
@@ -988,6 +1001,7 @@ export const CorePage: React.FC = () => {
                 </h3>
                 <button
                   onClick={() => setIsSlideOverOpen(false)}
+                  testId="core-drawer-close-btn"
                   className="rounded-lg p-1 text-gray-400 hover:bg-[#1a1c23] hover:text-white"
                 >
                   <X size={18} />
@@ -1003,6 +1017,7 @@ export const CorePage: React.FC = () => {
                       <button
                         type="button"
                         onClick={() => setOnboardType('PERSON')}
+                        testId="onboard-toggle-person"
                         className={`flex-1 flex items-center justify-center gap-1.5 py-1.5 text-xs font-semibold rounded ${
                           onboardType === 'PERSON'
                             ? 'bg-indigo-600 text-white shadow'
@@ -1015,6 +1030,7 @@ export const CorePage: React.FC = () => {
                       <button
                         type="button"
                         onClick={() => setOnboardType('ORGANIZATION')}
+                        testId="onboard-toggle-organization"
                         className={`flex-1 flex items-center justify-center gap-1.5 py-1.5 text-xs font-semibold rounded ${
                           onboardType === 'ORGANIZATION'
                             ? 'bg-indigo-600 text-white shadow'
@@ -1033,9 +1049,10 @@ export const CorePage: React.FC = () => {
                             <label className="block text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1.5">
                               First Name *
                             </label>
-                            <input
+                             <input
                               type="text"
                               {...regPerson('first_name')}
+                              testId="person-form-first-name-input"
                               placeholder="Ravi"
                               className="w-full rounded-lg border border-[#1a1c23] bg-[#13151a] px-3 py-2 text-sm text-white placeholder-gray-600 focus:border-indigo-500/40 focus:outline-none"
                             />
@@ -1048,6 +1065,7 @@ export const CorePage: React.FC = () => {
                             <input
                               type="text"
                               {...regPerson('last_name')}
+                              testId="person-form-last-name-input"
                               placeholder="Doe"
                               className="w-full rounded-lg border border-[#1a1c23] bg-[#13151a] px-3 py-2 text-sm text-white placeholder-gray-600 focus:border-indigo-500/40 focus:outline-none"
                             />
@@ -1063,6 +1081,7 @@ export const CorePage: React.FC = () => {
                             <input
                               type="text"
                               {...regPerson('middle_name')}
+                              testId="person-form-middle-name-input"
                               placeholder="Jaganathan"
                               className="w-full rounded-lg border border-[#1a1c23] bg-[#13151a] px-3 py-2 text-sm text-white placeholder-gray-600 focus:border-indigo-500/40 focus:outline-none"
                             />
@@ -1075,6 +1094,7 @@ export const CorePage: React.FC = () => {
                             <input
                               type="text"
                               {...regPerson('preferred_name')}
+                              testId="person-form-preferred-name-input"
                               placeholder="Ravi"
                               className="w-full rounded-lg border border-[#1a1c23] bg-[#13151a] px-3 py-2 text-sm text-white placeholder-gray-600 focus:border-indigo-500/40 focus:outline-none"
                             />
@@ -1089,6 +1109,7 @@ export const CorePage: React.FC = () => {
                             </label>
                             <select
                               {...regPerson('gender')}
+                              testId="person-form-gender-select"
                               className="w-full rounded-lg border border-[#1a1c23] bg-[#13151a] px-3 py-2 text-sm text-white focus:border-indigo-500/40 focus:outline-none"
                             >
                               <option value="MALE">Male</option>
@@ -1105,6 +1126,7 @@ export const CorePage: React.FC = () => {
                             <input
                               type="date"
                               {...regPerson('date_of_birth')}
+                              testId="person-form-dob-input"
                               className="w-full rounded-lg border border-[#1a1c23] bg-[#13151a] px-3 py-2 text-sm text-white focus:border-indigo-500/40 focus:outline-none"
                             />
                             {errPerson.date_of_birth && <p className="mt-1 text-xs text-red-400">{errPerson.date_of_birth.message}</p>}
@@ -1118,6 +1140,7 @@ export const CorePage: React.FC = () => {
                           <input
                             type="text"
                             {...regPerson('national_id')}
+                            testId="person-form-national-id-input"
                             placeholder="e.g. SSN-123-45-6789"
                             className="w-full rounded-lg border border-[#1a1c23] bg-[#13151a] px-3 py-2 text-sm text-white placeholder-gray-600 focus:border-indigo-500/40 focus:outline-none font-mono"
                           />
@@ -1130,6 +1153,7 @@ export const CorePage: React.FC = () => {
                           </label>
                           <textarea
                             {...regPerson('notes')}
+                            testId="person-form-notes-input"
                             placeholder="Add core descriptions or notes..."
                             rows={3}
                             className="w-full rounded-lg border border-[#1a1c23] bg-[#13151a] px-3 py-2 text-sm text-white placeholder-gray-600 focus:border-indigo-500/40 focus:outline-none resize-none"
@@ -1142,6 +1166,7 @@ export const CorePage: React.FC = () => {
                             type="checkbox"
                             id="p_active"
                             {...regPerson('is_active')}
+                            testId="person-form-active-checkbox"
                             className="rounded border-[#1a1c23] bg-[#13151a] text-indigo-600 focus:ring-0"
                           />
                           <label htmlFor="p_active" className="text-sm text-gray-300">
@@ -1153,12 +1178,14 @@ export const CorePage: React.FC = () => {
                           <button
                             type="button"
                             onClick={() => setIsSlideOverOpen(false)}
+                            testId="person-form-cancel-btn"
                             className="rounded-lg border border-[#1a1c23] hover:bg-[#13151a] px-4 py-2 text-sm text-gray-400 hover:text-white"
                           >
                             Cancel
                           </button>
                           <button
                             type="submit"
+                            testId="person-form-submit-btn"
                             className="rounded-lg bg-indigo-600 hover:bg-indigo-500 px-4 py-2 text-sm font-medium text-white shadow-lg shadow-indigo-500/25"
                           >
                             Create Person
@@ -1176,6 +1203,7 @@ export const CorePage: React.FC = () => {
                           <input
                             type="text"
                             {...regOrg('legal_name')}
+                            testId="org-form-legal-name-input"
                             placeholder="e.g. HDFC Bank Limited"
                             className="w-full rounded-lg border border-[#1a1c23] bg-[#13151a] px-3 py-2 text-sm text-white placeholder-gray-600 focus:border-indigo-500/40 focus:outline-none"
                           />
@@ -1223,6 +1251,7 @@ export const CorePage: React.FC = () => {
                             <input
                               type="text"
                               {...regOrg('registration_number')}
+                              testId="org-form-reg-number-input"
                               placeholder="BANK-REG-001"
                               className="w-full rounded-lg border border-[#1a1c23] bg-[#13151a] px-3 py-2 text-sm text-white placeholder-gray-600 focus:border-indigo-500/40 focus:outline-none font-mono"
                             />
@@ -1235,6 +1264,7 @@ export const CorePage: React.FC = () => {
                             <input
                               type="text"
                               {...regOrg('tax_identifier')}
+                              testId="org-form-tax-id-input"
                               placeholder="TAX-BANK-001"
                               className="w-full rounded-lg border border-[#1a1c23] bg-[#13151a] px-3 py-2 text-sm text-white placeholder-gray-600 focus:border-indigo-500/40 focus:outline-none font-mono"
                             />
@@ -1250,6 +1280,7 @@ export const CorePage: React.FC = () => {
                             <input
                               type="text"
                               {...regOrg('industry')}
+                              testId="org-form-sector-input"
                               placeholder="e.g. FINANCE"
                               className="w-full rounded-lg border border-[#1a1c23] bg-[#13151a] px-3 py-2 text-sm text-white placeholder-gray-600 focus:border-indigo-500/40 focus:outline-none"
                             />
@@ -1262,6 +1293,7 @@ export const CorePage: React.FC = () => {
                             <input
                               type="text"
                               {...regOrg('website')}
+                              testId="org-form-website-input"
                               placeholder="https://example.com"
                               className="w-full rounded-lg border border-[#1a1c23] bg-[#13151a] px-3 py-2 text-sm text-white placeholder-gray-600 focus:border-indigo-500/40 focus:outline-none"
                             />
@@ -1275,6 +1307,7 @@ export const CorePage: React.FC = () => {
                           </label>
                           <textarea
                             {...regOrg('notes')}
+                            testId="org-form-notes-input"
                             placeholder="Add organization descriptions..."
                             rows={3}
                             className="w-full rounded-lg border border-[#1a1c23] bg-[#13151a] px-3 py-2 text-sm text-white placeholder-gray-600 focus:border-indigo-500/40 focus:outline-none resize-none"
@@ -1287,6 +1320,7 @@ export const CorePage: React.FC = () => {
                             type="checkbox"
                             id="o_active"
                             {...regOrg('is_active')}
+                            testId="org-form-active-checkbox"
                             className="rounded border-[#1a1c23] bg-[#13151a] text-indigo-600 focus:ring-0"
                           />
                           <label htmlFor="o_active" className="text-sm text-gray-300">
@@ -1298,12 +1332,14 @@ export const CorePage: React.FC = () => {
                           <button
                             type="button"
                             onClick={() => setIsSlideOverOpen(false)}
+                            testId="org-form-cancel-btn"
                             className="rounded-lg border border-[#1a1c23] hover:bg-[#13151a] px-4 py-2 text-sm text-gray-400 hover:text-white"
                           >
                             Cancel
                           </button>
                           <button
                             type="submit"
+                            testId="org-form-submit-btn"
                             className="rounded-lg bg-indigo-600 hover:bg-indigo-500 px-4 py-2 text-sm font-medium text-white shadow-lg shadow-indigo-500/25"
                           >
                             Create Organization
@@ -1323,6 +1359,7 @@ export const CorePage: React.FC = () => {
                       </label>
                       <select
                         {...regAddr('address_type')}
+                        testId="address-form-type-select"
                         className="w-full rounded-lg border border-[#1a1c23] bg-[#13151a] px-3 py-2 text-sm text-white focus:border-indigo-500/40 focus:outline-none"
                       >
                         <option value="HOME">Home</option>
@@ -1396,6 +1433,7 @@ export const CorePage: React.FC = () => {
                         <input
                           type="text"
                           {...regAddr('postal_code')}
+                          testId="address-form-postal-code-input"
                           placeholder="600040"
                           className="w-full rounded-lg border border-[#1a1c23] bg-[#13151a] px-3 py-2 text-sm text-white placeholder-gray-600 focus:border-indigo-500/40 focus:outline-none font-mono"
                         />
@@ -1408,6 +1446,7 @@ export const CorePage: React.FC = () => {
                         <input
                           type="text"
                           {...regAddr('country')}
+                          testId="address-form-country-input"
                           placeholder="e.g. IND"
                           className="w-full rounded-lg border border-[#1a1c23] bg-[#13151a] px-3 py-2 text-sm text-white placeholder-gray-600 focus:border-indigo-500/40 focus:outline-none font-mono"
                         />
@@ -1421,6 +1460,7 @@ export const CorePage: React.FC = () => {
                           type="checkbox"
                           id="a_primary"
                           {...regAddr('is_primary')}
+                          testId="address-form-primary-checkbox"
                           className="rounded border-[#1a1c23] bg-[#13151a] text-indigo-600 focus:ring-0"
                         />
                         <label htmlFor="a_primary" className="text-sm text-gray-300">
@@ -1432,6 +1472,7 @@ export const CorePage: React.FC = () => {
                           type="checkbox"
                           id="a_active"
                           {...regAddr('is_active')}
+                          testId="address-form-active-checkbox"
                           className="rounded border-[#1a1c23] bg-[#13151a] text-indigo-600 focus:ring-0"
                         />
                         <label htmlFor="a_active" className="text-sm text-gray-300">
@@ -1444,12 +1485,14 @@ export const CorePage: React.FC = () => {
                       <button
                         type="button"
                         onClick={() => setIsSlideOverOpen(false)}
+                        testId="address-form-cancel-btn"
                         className="rounded-lg border border-[#1a1c23] hover:bg-[#13151a] px-4 py-2 text-sm text-gray-400 hover:text-white"
                       >
                         Cancel
                       </button>
                       <button
                         type="submit"
+                        testId="address-form-submit-btn"
                         className="rounded-lg bg-indigo-600 hover:bg-indigo-500 px-4 py-2 text-sm font-medium text-white shadow-lg"
                       >
                         Save Address
@@ -1467,6 +1510,7 @@ export const CorePage: React.FC = () => {
                       </label>
                       <select
                         {...regContact('contact_type')}
+                        testId="contact-form-type-select"
                         className="w-full rounded-lg border border-[#1a1c23] bg-[#13151a] px-3 py-2 text-sm text-white focus:border-indigo-500/40 focus:outline-none"
                       >
                         <option value="MOBILE">Mobile Phone</option>
@@ -1487,6 +1531,7 @@ export const CorePage: React.FC = () => {
                       <input
                         type="text"
                         {...regContact('contact_value')}
+                        testId="contact-form-value-input"
                         placeholder="e.g. +91-98765-43210 or email@domain.com"
                         className="w-full rounded-lg border border-[#1a1c23] bg-[#13151a] px-3 py-2 text-sm text-white placeholder-gray-600 focus:border-indigo-500/40 focus:outline-none"
                       />
@@ -1500,6 +1545,7 @@ export const CorePage: React.FC = () => {
                       <input
                         type="text"
                         {...regContact('notes')}
+                        testId="contact-form-notes-input"
                         placeholder="Primary mobile / work email"
                         className="w-full rounded-lg border border-[#1a1c23] bg-[#13151a] px-3 py-2 text-sm text-white placeholder-gray-600 focus:border-indigo-500/40 focus:outline-none"
                       />
@@ -1511,6 +1557,7 @@ export const CorePage: React.FC = () => {
                           type="checkbox"
                           id="c_primary"
                           {...regContact('is_primary')}
+                          testId="contact-form-primary-checkbox"
                           className="rounded border-[#1a1c23] bg-[#13151a] text-indigo-600 focus:ring-0"
                         />
                         <label htmlFor="c_primary" className="text-sm text-gray-300">
@@ -1522,6 +1569,7 @@ export const CorePage: React.FC = () => {
                           type="checkbox"
                           id="c_active"
                           {...regContact('is_active')}
+                          testId="contact-form-active-checkbox"
                           className="rounded border-[#1a1c23] bg-[#13151a] text-indigo-600 focus:ring-0"
                         />
                         <label htmlFor="c_active" className="text-sm text-gray-300">
@@ -1534,12 +1582,14 @@ export const CorePage: React.FC = () => {
                       <button
                         type="button"
                         onClick={() => setIsSlideOverOpen(false)}
+                        testId="contact-form-cancel-btn"
                         className="rounded-lg border border-[#1a1c23] hover:bg-[#13151a] px-4 py-2 text-sm text-gray-400 hover:text-white"
                       >
                         Cancel
                       </button>
                       <button
                         type="submit"
+                        testId="contact-form-submit-btn"
                         className="rounded-lg bg-indigo-600 hover:bg-indigo-500 px-4 py-2 text-sm font-medium text-white shadow-lg"
                       >
                         Save Contact
@@ -1557,15 +1607,16 @@ export const CorePage: React.FC = () => {
                       </label>
                       <select
                         {...regRel('target_entity_id')}
+                        testId="relationship-form-target-select"
                         className="w-full rounded-lg border border-[#1a1c23] bg-[#13151a] px-3 py-2 text-sm text-white focus:border-indigo-500/40 focus:outline-none"
                       >
                         <option value="">Select Target Entity</option>
                         {mappedEntities
                           ?.filter((e) => e.id !== selectedEntityId)
                           ?.map((e) => (
-                            <option key={e.id} value={e.id}>
-                              {e.name} (ID: {e.id})
-                            </option>
+                             <option key={e.id} value={e.id}>
+                               {e.name} (ID: {e.id})
+                             </option>
                           ))}
                       </select>
                       {errRel.target_entity_id && <p className="mt-1 text-xs text-red-400">{errRel.target_entity_id.message}</p>}
@@ -1577,6 +1628,7 @@ export const CorePage: React.FC = () => {
                       </label>
                       <select
                         {...regRel('relationship_type')}
+                        testId="relationship-form-type-select"
                         className="w-full rounded-lg border border-[#1a1c23] bg-[#13151a] px-3 py-2 text-sm text-white focus:border-indigo-500/40 focus:outline-none"
                       >
                         <option value="SPOUSE">Spouse</option>
@@ -1606,6 +1658,7 @@ export const CorePage: React.FC = () => {
                         <input
                           type="date"
                           {...regRel('start_date')}
+                          testId="relationship-form-start-date-input"
                           className="w-full rounded-lg border border-[#1a1c23] bg-[#13151a] px-3 py-2 text-sm text-white focus:border-indigo-500/40 focus:outline-none"
                         />
                       </div>
@@ -1616,6 +1669,7 @@ export const CorePage: React.FC = () => {
                         <input
                           type="date"
                           {...regRel('end_date')}
+                          testId="relationship-form-end-date-input"
                           className="w-full rounded-lg border border-[#1a1c23] bg-[#13151a] px-3 py-2 text-sm text-white focus:border-indigo-500/40 focus:outline-none"
                         />
                       </div>
@@ -1626,6 +1680,7 @@ export const CorePage: React.FC = () => {
                         type="checkbox"
                         id="r_active"
                         {...regRel('is_active')}
+                        testId="relationship-form-active-checkbox"
                         className="rounded border-[#1a1c23] bg-[#13151a] text-indigo-600 focus:ring-0"
                       />
                       <label htmlFor="r_active" className="text-sm text-gray-300">
@@ -1637,12 +1692,14 @@ export const CorePage: React.FC = () => {
                       <button
                         type="button"
                         onClick={() => setIsSlideOverOpen(false)}
+                        testId="relationship-form-cancel-btn"
                         className="rounded-lg border border-[#1a1c23] hover:bg-[#13151a] px-4 py-2 text-sm text-gray-400 hover:text-white"
                       >
                         Cancel
                       </button>
                       <button
                         type="submit"
+                        testId="relationship-form-submit-btn"
                         className="rounded-lg bg-indigo-600 hover:bg-indigo-500 px-4 py-2 text-sm font-medium text-white shadow-lg"
                       >
                         Link Relationship
@@ -1661,6 +1718,7 @@ export const CorePage: React.FC = () => {
                         </label>
                         <select
                           {...regPrimContact('organization_id')}
+                          testId="primary-contact-form-org-select"
                           className="w-full rounded-lg border border-[#1a1c23] bg-[#13151a] px-3 py-2 text-sm text-white focus:border-indigo-500/40 focus:outline-none font-sans"
                         >
                           <option value="">Select Organization</option>
@@ -1679,6 +1737,7 @@ export const CorePage: React.FC = () => {
                         </label>
                         <select
                           {...regPrimContact('person_id')}
+                          testId="primary-contact-form-person-select"
                           className="w-full rounded-lg border border-[#1a1c23] bg-[#13151a] px-3 py-2 text-sm text-white focus:border-indigo-500/40 focus:outline-none"
                         >
                           <option value="">Select Person</option>
@@ -1706,6 +1765,7 @@ export const CorePage: React.FC = () => {
                       <input
                         type="text"
                         {...regPrimContact('role')}
+                        testId="primary-contact-form-role-input"
                         placeholder="e.g. KARTA, MANAGER, TRUSTEE"
                         className="w-full rounded-lg border border-[#1a1c23] bg-[#13151a] px-3 py-2 text-sm text-white placeholder-gray-600 focus:border-indigo-500/40 focus:outline-none font-sans"
                       />
@@ -1719,6 +1779,7 @@ export const CorePage: React.FC = () => {
                       <input
                         type="text"
                         {...regPrimContact('notes')}
+                        testId="primary-contact-form-notes-input"
                         placeholder="e.g. Authorized signatory"
                         className="w-full rounded-lg border border-[#1a1c23] bg-[#13151a] px-3 py-2 text-sm text-white placeholder-gray-600 focus:border-indigo-500/40 focus:outline-none font-sans"
                       />
@@ -1729,12 +1790,14 @@ export const CorePage: React.FC = () => {
                       <button
                         type="button"
                         onClick={() => setIsSlideOverOpen(false)}
+                        testId="primary-contact-form-cancel-btn"
                         className="rounded-lg border border-[#1a1c23] hover:bg-[#13151a] px-4 py-2 text-sm text-gray-400 hover:text-white"
                       >
                         Cancel
                       </button>
                       <button
                         type="submit"
+                        testId="primary-contact-form-submit-btn"
                         className="rounded-lg bg-indigo-600 hover:bg-indigo-500 px-4 py-2 text-sm font-medium text-white shadow-lg"
                       >
                         Link Primary Contact

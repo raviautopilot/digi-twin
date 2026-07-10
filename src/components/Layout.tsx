@@ -98,7 +98,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
       >
         {/* Brand Header */}
         <div className="flex h-14 items-center justify-between border-b border-[#1a1c23] px-4">
-          <Link to="/" className="flex items-center gap-2 overflow-hidden">
+          <Link to="/" className="flex items-center gap-2 overflow-hidden" testId="sidebar-brand-logo">
             <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-tr from-purple-600 to-indigo-600 font-bold text-white shadow-lg shadow-purple-500/30 shrink-0">
               DT
             </div>
@@ -111,6 +111,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
           {!collapsed && (
             <button
               onClick={toggleSidebar}
+              testId="sidebar-toggle-btn"
               className="rounded-lg p-1 text-gray-500 hover:bg-[#1a1c23] hover:text-white"
             >
               <ChevronLeft size={16} />
@@ -134,6 +135,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
                     return (
                       <li key={itemIdx}>
                         <div
+                          testId={`nav-link-${item.path.replace('/', '')}`}
                           className={`flex items-center gap-3 rounded-lg px-3 py-2 text-sm text-gray-600 cursor-not-allowed group relative ${
                             collapsed ? 'justify-center' : ''
                           }`}
@@ -161,6 +163,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
                     <li key={itemIdx}>
                       <NavLink
                         to={item.path}
+                        testId={`nav-link-${item.path.replace('/', '')}`}
                         className={({ isActive }) =>
                           `flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors group relative ${
                             isActive
@@ -197,6 +200,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
           {collapsed ? (
             <button
               onClick={toggleSidebar}
+              testId="sidebar-toggle-btn"
               className="rounded-lg p-1.5 text-gray-500 hover:bg-[#1a1c23] hover:text-white"
             >
               <ChevronRight size={18} />
@@ -225,6 +229,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
           <div className="flex items-center gap-3">
             <button
               onClick={() => setSearchOpen(true)}
+              testId="search-trigger-btn"
               className="flex w-64 items-center gap-2 rounded-lg bg-[#13151a] border border-[#1a1c23] px-3 py-1.5 text-left text-xs text-gray-500 hover:border-purple-500/30 hover:text-gray-300 transition-all focus:outline-none"
             >
               <Search size={14} />
@@ -272,6 +277,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
                 refetchConfig();
                 refetchCore();
               }}
+              testId="env-refresh-btn"
               title="Refresh services health status"
               className="p-1.5 rounded-lg text-gray-400 hover:text-white hover:bg-[#1a1c23]"
             >
@@ -301,11 +307,13 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
               <input
                 type="text"
                 autoFocus
+                testId="command-palette-search-input"
                 placeholder="Type a command or search..."
                 className="w-full bg-transparent text-sm text-white placeholder-gray-500 focus:outline-none"
               />
               <button
                 onClick={() => setSearchOpen(false)}
+                testId="command-palette-close-btn"
                 className="rounded bg-[#1a1c23] border border-gray-800 px-1.5 py-0.5 text-xs text-gray-400 hover:text-white"
               >
                 ESC
@@ -314,11 +322,17 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
             <div className="p-4 text-xs text-gray-600">
               <p className="font-semibold text-gray-400 mb-2">System Commands</p>
               <ul className="space-y-1.5 text-gray-300">
-                <li className="flex items-center justify-between rounded p-1.5 hover:bg-purple-600/10 hover:text-purple-400 cursor-pointer">
+                <li
+                  testId="command-palette-item-config"
+                  className="flex items-center justify-between rounded p-1.5 hover:bg-purple-600/10 hover:text-purple-400 cursor-pointer"
+                >
                   <span>Go to Configuration Control Plane</span>
                   <span className="text-gray-500 font-mono">/config</span>
                 </li>
-                <li className="flex items-center justify-between rounded p-1.5 hover:bg-purple-600/10 hover:text-purple-400 cursor-pointer">
+                <li
+                  testId="command-palette-item-core"
+                  className="flex items-center justify-between rounded p-1.5 hover:bg-purple-600/10 hover:text-purple-400 cursor-pointer"
+                >
                   <span>Go to Core Base Entity Setup</span>
                   <span className="text-gray-500 font-mono">/core</span>
                 </li>
