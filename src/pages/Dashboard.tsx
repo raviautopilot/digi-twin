@@ -51,6 +51,7 @@ export const Dashboard: React.FC = () => {
           {/* Config Module Card */}
           <Link
             to="/config"
+            testId="dashboard-card-config"
             className="group block rounded-2xl border border-[#1a1c23] bg-[#0c0d12]/60 p-6 backdrop-blur-sm transition-all hover:-translate-y-1 hover:border-purple-500/30 hover:bg-[#0c0d12]/80 hover:shadow-xl hover:shadow-purple-500/5"
           >
             <div className="flex items-center justify-between">
@@ -75,6 +76,7 @@ export const Dashboard: React.FC = () => {
           {/* Core Entities Card */}
           <Link
             to="/core"
+            testId="dashboard-card-core"
             className="group block rounded-2xl border border-[#1a1c23] bg-[#0c0d12]/60 p-6 backdrop-blur-sm transition-all hover:-translate-y-1 hover:border-indigo-500/30 hover:bg-[#0c0d12]/80 hover:shadow-xl hover:shadow-indigo-500/5"
           >
             <div className="flex items-center justify-between">

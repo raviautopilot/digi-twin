@@ -48,6 +48,7 @@ export const ServiceOffline: React.FC<ServiceOfflineProps> = ({
 
       <button
         onClick={onRetry}
+        testId="service-offline-retry-btn"
         className="flex items-center gap-2 rounded-lg bg-gradient-to-r from-red-600 to-red-700 hover:from-red-500 hover:to-red-600 px-5 py-2 text-sm font-medium text-white shadow-lg shadow-red-500/20 hover:shadow-red-500/35 transition-all"
       >
         <RefreshCw size={14} className="animate-spin-slow" />
