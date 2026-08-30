@@ -5,6 +5,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import {
   Plus,
   Trash2,
+  Edit2,
   Search,
   User,
   Building2,
@@ -21,11 +22,14 @@ import {
   useCoreHealth,
   useEntities,
   useCreateEntity,
+  useUpdateEntity,
   useDeleteEntity,
   usePeople,
   useCreatePerson,
+  useUpdatePerson,
   useOrganizations,
   useCreateOrganization,
+  useUpdateOrganization,
   usePersonAddresses,
   useCreatePersonAddress,
   useDeletePersonAddress,
@@ -63,13 +67,13 @@ const personSchema = z.object({
 });
 
 const organizationSchema = z.object({
-  legal_name: z.string().min(2, 'Legal name is required').max(200),
+  legal_name: z.string().min(1, 'Legal name is required').max(200),
   trade_name: z.string().max(200).optional().or(z.literal('')),
   organization_type: z.string().min(1, 'Organization type is required'),
   registration_number: z.string().max(100).optional().or(z.literal('')),
   tax_identifier: z.string().max(100).optional().or(z.literal('')),
   industry: z.string().max(100).optional().or(z.literal('')),
-  website: z.string().url('Must be a valid URL').optional().or(z.literal('')),
+  website: z.string().max(250).optional().or(z.literal('')),
   notes: z.string().max(500).optional().or(z.literal('')),
   is_active: z.boolean().default(true),
 });
@@ -132,9 +136,14 @@ export const CorePage: React.FC = () => {
 
   // Mutations
   const createEntity = useCreateEntity();
+  const updateEntity = useUpdateEntity();
   const deleteEntity = useDeleteEntity();
   const createPerson = useCreatePerson();
+  const updatePerson = useUpdatePerson();
   const createOrg = useCreateOrganization();
+  const updateOrg = useUpdateOrganization();
+
+  const [editingEntity, setEditingEntity] = useState<{ id: number; isPerson: boolean; detailId: number } | null>(null);
 
   const createPAddress = useCreatePersonAddress();
   const deletePAddress = useDeletePersonAddress();
@@ -203,10 +212,52 @@ export const CorePage: React.FC = () => {
 
   // Onboard Entity Modal Open
   const handleOpenOnboard = () => {
+    setEditingEntity(null);
     setSlideOverType('entity');
     setOnboardType('PERSON');
     rPerson({ first_name: '', middle_name: '', last_name: '', preferred_name: '', gender: 'MALE', date_of_birth: '', national_id: '', notes: '', is_active: true });
     rOrg({ legal_name: '', trade_name: '', organization_type: 'CORPORATION', registration_number: '', tax_identifier: '', industry: '', website: '', notes: '', is_active: true });
+    setIsSlideOverOpen(true);
+  };
+
+  const handleEditEntity = (entityId: number) => {
+    const ent = entities?.find(e => e.id === entityId);
+    if (!ent) return;
+    const isPerson = ent.entity_type === 'PERSON';
+    setSlideOverType('entity');
+    if (isPerson) {
+      const p = people?.find(x => x.entity_id === entityId);
+      if (!p) return;
+      setEditingEntity({ id: entityId, isPerson: true, detailId: p.id });
+      setOnboardType('PERSON');
+      rPerson({
+        first_name: p.first_name || '',
+        middle_name: p.middle_name || '',
+        last_name: p.last_name || '',
+        preferred_name: p.preferred_name || '',
+        gender: p.gender || 'MALE',
+        date_of_birth: p.date_of_birth ? p.date_of_birth.split('T')[0] : '',
+        national_id: p.national_id || '',
+        notes: p.notes || '',
+        is_active: p.is_active ?? true,
+      });
+    } else {
+      const o = organizations?.find(x => x.entity_id === entityId);
+      if (!o) return;
+      setEditingEntity({ id: entityId, isPerson: false, detailId: o.id });
+      setOnboardType('ORGANIZATION');
+      rOrg({
+        legal_name: o.legal_name || '',
+        trade_name: o.trade_name || '',
+        organization_type: o.organization_type || 'CORPORATION',
+        registration_number: o.registration_number || '',
+        tax_identifier: o.tax_identifier || '',
+        industry: o.industry || '',
+        website: o.website || '',
+        notes: o.notes || '',
+        is_active: o.is_active ?? true,
+      });
+    }
     setIsSlideOverOpen(true);
   };
 
@@ -248,32 +299,52 @@ export const CorePage: React.FC = () => {
   const onSubmit = async (data: any) => {
     try {
       if (slideOverType === 'entity') {
-        const entityRes = await createEntity.mutateAsync({
-          entity_type: onboardType,
-          is_active: data.is_active ?? true,
-        });
-
-        const entityId = entityRes.id;
-        if (!entityId) throw new Error('Failed to generate base entity ID');
-
-        if (onboardType === 'PERSON') {
-          const payload = {
-            ...data,
-            entity_id: entityId,
-            date_of_birth: data.date_of_birth ? `${data.date_of_birth}T00:00:00Z` : undefined,
-          };
-          await createPerson.mutateAsync(payload);
-          showToast(`Person ${data.first_name} onboarded successfully`, 'success');
+        if (editingEntity) {
+          if (editingEntity.isPerson) {
+            const payload = {
+              ...data,
+              entity_id: editingEntity.id,
+              date_of_birth: data.date_of_birth ? `${data.date_of_birth}T00:00:00Z` : undefined,
+            };
+            await updatePerson.mutateAsync({ id: editingEntity.detailId, data: payload });
+            showToast(`Person ${data.first_name} updated successfully`, 'success');
+          } else {
+            const payload = {
+              ...data,
+              entity_id: editingEntity.id,
+            };
+            await updateOrg.mutateAsync({ id: editingEntity.detailId, data: payload });
+            showToast(`Organization ${data.legal_name} updated successfully`, 'success');
+          }
+          setEditingEntity(null);
         } else {
-          const payload = {
-            ...data,
-            entity_id: entityId,
-          };
-          await createOrg.mutateAsync(payload);
-          showToast(`Organization ${data.legal_name} onboarded successfully`, 'success');
-        }
+          const entityRes = await createEntity.mutateAsync({
+            entity_type: onboardType,
+            is_active: data.is_active ?? true,
+          });
 
-        setSelectedEntityId(entityId);
+          const entityId = entityRes.id;
+          if (!entityId) throw new Error('Failed to generate base entity ID');
+
+          if (onboardType === 'PERSON') {
+            const payload = {
+              ...data,
+              entity_id: entityId,
+              date_of_birth: data.date_of_birth ? `${data.date_of_birth}T00:00:00Z` : undefined,
+            };
+            await createPerson.mutateAsync(payload);
+            showToast(`Person ${data.first_name} onboarded successfully`, 'success');
+          } else {
+            const payload = {
+              ...data,
+              entity_id: entityId,
+            };
+            await createOrg.mutateAsync(payload);
+            showToast(`Organization ${data.legal_name} onboarded successfully`, 'success');
+          }
+
+          setSelectedEntityId(entityId);
+        }
       } else if (slideOverType === 'address' && selectedEntityId) {
         const isPerson = entities?.find(e => e.id === selectedEntityId)?.entity_type === 'PERSON';
         if (isPerson) {
@@ -656,7 +727,15 @@ export const CorePage: React.FC = () => {
                         <td className="px-6 py-3.5 text-xs text-gray-500 max-w-xs truncate">
                           {row.detail}
                         </td>
-                        <td className="whitespace-nowrap px-6 py-3.5 text-right text-xs font-medium" onClick={(e) => e.stopPropagation()}>
+                        <td className="whitespace-nowrap px-6 py-3.5 text-right text-xs font-medium space-x-1" onClick={(e) => e.stopPropagation()}>
+                          <button
+                            onClick={() => row.id && handleEditEntity(row.id)}
+                            testId={`core-entity-edit-btn-${row.id}`}
+                            className="rounded p-1 hover:bg-[#1a1c23] hover:text-white"
+                            title="Edit Entity"
+                          >
+                            <Edit2 size={13} />
+                          </button>
                           <button
                             onClick={() => row.id && handleDeleteEntity(row.id, row.name)}
                             testId={`core-entity-delete-btn-${row.id}`}
@@ -703,13 +782,23 @@ export const CorePage: React.FC = () => {
                     ID: {selectedEntityId} &bull; {selectedDetails.base.entity_type}
                   </p>
                 </div>
-                <button
-                  onClick={() => setSelectedEntityId(null)}
-                  testId="core-detail-close-btn"
-                  className="rounded bg-[#1a1c23] p-1 text-gray-400 hover:text-white hover:bg-gray-800"
-                >
-                  <X size={12} />
-                </button>
+                <div className="flex items-center gap-1.5">
+                  <button
+                    onClick={() => selectedEntityId && handleEditEntity(selectedEntityId)}
+                    testId="core-detail-edit-btn"
+                    className="rounded bg-[#1a1c23] p-1 text-gray-400 hover:text-white hover:bg-gray-800"
+                    title="Edit Profile"
+                  >
+                    <Edit2 size={12} />
+                  </button>
+                  <button
+                    onClick={() => setSelectedEntityId(null)}
+                    testId="core-detail-close-btn"
+                    className="rounded bg-[#1a1c23] p-1 text-gray-400 hover:text-white hover:bg-gray-800"
+                  >
+                    <X size={12} />
+                  </button>
+                </div>
               </div>
 
               {/* Extended properties */}
@@ -993,7 +1082,7 @@ export const CorePage: React.FC = () => {
             <div className="w-screen max-w-md border-l border-[#1a1c23] bg-[#0c0d12] p-6 shadow-2xl flex flex-col h-full text-left">
               <div className="flex items-center justify-between border-b border-[#1a1c23] pb-4 mb-6">
                 <h3 className="text-lg font-semibold text-white">
-                  {slideOverType === 'entity' && 'Onboard Base Entity'}
+                  {slideOverType === 'entity' && (editingEntity ? (editingEntity.isPerson ? 'Edit Person' : 'Edit Organization') : 'Onboard Base Entity')}
                   {slideOverType === 'address' && 'Add Address'}
                   {slideOverType === 'contact' && 'Add Contact Channel'}
                   {slideOverType === 'relationship' && 'Link Relationship'}
@@ -1013,34 +1102,36 @@ export const CorePage: React.FC = () => {
                 {/* Onboard Entity Form */}
                 {slideOverType === 'entity' && (
                   <div className="space-y-6">
-                    <div className="flex gap-2 p-1 rounded-lg bg-[#13151a] border border-[#1a1c23]">
-                      <button
-                        type="button"
-                        onClick={() => setOnboardType('PERSON')}
-                        testId="onboard-toggle-person"
-                        className={`flex-1 flex items-center justify-center gap-1.5 py-1.5 text-xs font-semibold rounded ${
-                          onboardType === 'PERSON'
-                            ? 'bg-indigo-600 text-white shadow'
-                            : 'text-gray-400 hover:text-gray-200'
-                        }`}
-                      >
-                        <User size={12} />
-                        Person
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => setOnboardType('ORGANIZATION')}
-                        testId="onboard-toggle-organization"
-                        className={`flex-1 flex items-center justify-center gap-1.5 py-1.5 text-xs font-semibold rounded ${
-                          onboardType === 'ORGANIZATION'
-                            ? 'bg-indigo-600 text-white shadow'
-                            : 'text-gray-400 hover:text-gray-200'
-                        }`}
-                      >
-                        <Building2 size={12} />
-                        Organization
-                      </button>
-                    </div>
+                    {!editingEntity && (
+                      <div className="flex gap-2 p-1 rounded-lg bg-[#13151a] border border-[#1a1c23]">
+                        <button
+                          type="button"
+                          onClick={() => setOnboardType('PERSON')}
+                          testId="onboard-toggle-person"
+                          className={`flex-1 flex items-center justify-center gap-1.5 py-1.5 text-xs font-semibold rounded ${
+                            onboardType === 'PERSON'
+                              ? 'bg-indigo-600 text-white shadow'
+                              : 'text-gray-400 hover:text-gray-200'
+                          }`}
+                        >
+                          <User size={12} />
+                          Person
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => setOnboardType('ORGANIZATION')}
+                          testId="onboard-toggle-organization"
+                          className={`flex-1 flex items-center justify-center gap-1.5 py-1.5 text-xs font-semibold rounded ${
+                            onboardType === 'ORGANIZATION'
+                              ? 'bg-indigo-600 text-white shadow'
+                              : 'text-gray-400 hover:text-gray-200'
+                          }`}
+                        >
+                          <Building2 size={12} />
+                          Organization
+                        </button>
+                      </div>
+                    )}
 
                     {onboardType === 'PERSON' && (
                       <form onSubmit={hPerson(onSubmit)} className="space-y-4">
@@ -1188,14 +1279,14 @@ export const CorePage: React.FC = () => {
                             testId="person-form-submit-btn"
                             className="rounded-lg bg-indigo-600 hover:bg-indigo-500 px-4 py-2 text-sm font-medium text-white shadow-lg shadow-indigo-500/25"
                           >
-                            Create Person
+                            {editingEntity ? 'Update Person' : 'Create Person'}
                           </button>
                         </div>
                       </form>
                     )}
 
                     {onboardType === 'ORGANIZATION' && (
-                      <form onSubmit={hOrg(onSubmit)} className="space-y-4">
+                      <form onSubmit={hOrg(onSubmit, (errs) => console.error('Org form errors:', errs))} className="space-y-4">
                         <div>
                           <label className="block text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1.5">
                             Legal Business Name *
@@ -1229,6 +1320,7 @@ export const CorePage: React.FC = () => {
                             </label>
                             <select
                               {...regOrg('organization_type')}
+                              testId="org-form-type-select"
                               className="w-full rounded-lg border border-[#1a1c23] bg-[#13151a] px-3 py-2 text-sm text-white focus:border-indigo-500/40 focus:outline-none"
                             >
                               <option value="BANK">Bank / Financial Inst</option>
@@ -1342,7 +1434,7 @@ export const CorePage: React.FC = () => {
                             testId="org-form-submit-btn"
                             className="rounded-lg bg-indigo-600 hover:bg-indigo-500 px-4 py-2 text-sm font-medium text-white shadow-lg shadow-indigo-500/25"
                           >
-                            Create Organization
+                            {editingEntity ? 'Update Organization' : 'Create Organization'}
                           </button>
                         </div>
                       </form>
