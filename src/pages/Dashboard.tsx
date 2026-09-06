@@ -1,8 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Settings, Users, DollarSign, TrendingUp, Bell, LayoutGrid, ArrowRight } from 'lucide-react';
+import { Settings, Users, ArrowRight } from 'lucide-react';
 import { useConfigHealth } from '../api/config';
 import { useCoreHealth } from '../api/core';
+import { CORE_MODULES, OPS_MODULES } from '../components/Layout';
 
 export const Dashboard: React.FC = () => {
   const { data: configHealth, isError: configError } = useConfigHealth();
@@ -12,64 +13,76 @@ export const Dashboard: React.FC = () => {
   const isCoreUp = coreHealth?.status === 'UP' && !coreError;
 
   return (
-    <div className="space-y-8 max-w-6xl mx-auto">
+    <div className="h-full overflow-auto px-6 pt-6 pb-8 space-y-6 max-w-7xl mx-auto text-slate-200">
       {/* Hero Welcome */}
-      <div className="rounded-2xl border border-[#1a1c23] bg-gradient-to-br from-[#0c0d12]/95 via-[#0e1017]/95 to-[#13151f]/95 p-8 shadow-xl relative overflow-hidden">
-        <div className="absolute top-0 right-0 h-48 w-48 rounded-full bg-purple-500/10 blur-[80px]" />
-        <div className="absolute bottom-0 left-0 h-48 w-48 rounded-full bg-indigo-500/10 blur-[80px]" />
-        
-        <h1 className="text-3xl font-extrabold tracking-tight text-white md:text-4xl">
-          Personal ERP & Digital Twin
-        </h1>
-        <p className="mt-3 text-base text-gray-400 max-w-2xl leading-relaxed">
-          Welcome to the control plane for your personal digital twin. Lay down system configurations, manage operational parameters, and set up your core foundation entities.
-        </p>
+      <div className="rounded-lg border border-slate-800 bg-[#0d1421] p-6 shadow-xl relative overflow-hidden">
+        <div className="absolute top-0 right-0 h-48 w-48 rounded-full bg-cyan-500/5 blur-[80px]" />
 
-        {/* Quick status overview */}
-        <div className="mt-6 flex flex-wrap gap-4 border-t border-[#1a1c23]/60 pt-6">
-          <div className="flex items-center gap-2">
-            <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
-            <span className="text-xs text-gray-500">System Shell Online</span>
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div>
+            <div className="flex items-center gap-2 mb-2">
+              <span className="w-2 h-2 rounded-full bg-cyan-400 shadow-[0_0_6px_rgba(6,182,212,0.6)]" />
+              <span className="text-[10px] font-mono text-cyan-400 font-semibold tracking-wider uppercase">
+                NexusERP System Shell
+              </span>
+            </div>
+            <h1 className="text-2xl font-bold tracking-tight text-white">
+              Personal ERP & Digital Twin
+            </h1>
+            <p className="mt-1 text-xs text-slate-400 max-w-2xl leading-relaxed">
+              Unified control plane for configuration parameters, base organizational entities, and full-suite ERP modular workflows.
+            </p>
           </div>
-          <div className="h-4 w-px bg-gray-800" />
-          <div className="flex items-center gap-2">
-            <span className={`h-2 w-2 rounded-full ${isConfigUp ? 'bg-emerald-500' : 'bg-red-500'}`} />
-            <span className="text-xs text-gray-500">Config API (Port 1705): {isConfigUp ? 'Connected' : 'Offline'}</span>
-          </div>
-          <div className="h-4 w-px bg-gray-800" />
-          <div className="flex items-center gap-2">
-            <span className={`h-2 w-2 rounded-full ${isCoreUp ? 'bg-emerald-500' : 'bg-red-500'}`} />
-            <span className="text-xs text-gray-500">Core API (Port 1706): {isCoreUp ? 'Connected' : 'Offline'}</span>
+
+          {/* Service health indicators */}
+          <div className="flex flex-wrap items-center gap-3 border border-slate-800 bg-[#111827] px-4 py-2.5 rounded font-mono text-xs">
+            <div className="flex items-center gap-1.5">
+              <span className={`h-2 w-2 rounded-full ${isConfigUp ? 'bg-emerald-400 shadow-[0_0_6px_rgba(52,211,153,0.6)]' : 'bg-rose-500'}`} />
+              <span className="text-slate-400">CONFIG:</span>
+              <span className={isConfigUp ? 'text-emerald-400 font-semibold' : 'text-rose-400 font-semibold'}>
+                {isConfigUp ? 'ONLINE' : 'OFFLINE'}
+              </span>
+            </div>
+            <div className="h-3 w-px bg-slate-800" />
+            <div className="flex items-center gap-1.5">
+              <span className={`h-2 w-2 rounded-full ${isCoreUp ? 'bg-emerald-400 shadow-[0_0_6px_rgba(52,211,153,0.6)]' : 'bg-rose-500'}`} />
+              <span className="text-slate-400">CORE:</span>
+              <span className={isCoreUp ? 'text-emerald-400 font-semibold' : 'text-rose-400 font-semibold'}>
+                {isCoreUp ? 'ONLINE' : 'OFFLINE'}
+              </span>
+            </div>
           </div>
         </div>
       </div>
 
-      {/* Grid of Workspaces */}
-      <div className="space-y-4">
-        <h2 className="text-lg font-semibold tracking-wide text-gray-400">Phase 1 Control Plane Modules</h2>
-        <div className="grid gap-6 sm:grid-cols-2">
+      {/* Primary Control Planes */}
+      <div className="space-y-3">
+        <h2 className="text-xs font-semibold uppercase tracking-widest text-slate-400 font-mono">
+          System Control Planes
+        </h2>
+        <div className="grid gap-4 sm:grid-cols-2">
           {/* Config Module Card */}
           <Link
             to="/config"
             testId="dashboard-card-config"
-            className="group block rounded-2xl border border-[#1a1c23] bg-[#0c0d12]/60 p-6 backdrop-blur-sm transition-all hover:-translate-y-1 hover:border-purple-500/30 hover:bg-[#0c0d12]/80 hover:shadow-xl hover:shadow-purple-500/5"
+            className="group block rounded border border-slate-800 bg-[#111827] p-5 transition-all hover:border-cyan-600 hover:bg-slate-900/60 shadow-sm"
           >
             <div className="flex items-center justify-between">
-              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-purple-500/10 text-purple-400 group-hover:bg-purple-500 group-hover:text-white transition-all">
-                <Settings size={22} />
+              <div className="flex h-10 w-10 items-center justify-center rounded bg-cyan-950/60 text-cyan-400 border border-cyan-800/60 group-hover:scale-105 transition-transform">
+                <Settings size={20} />
               </div>
-              <span className="rounded-full bg-purple-950/40 border border-purple-500/30 px-2.5 py-0.5 text-xs text-purple-300 font-medium">
-                Active
+              <span className="font-mono text-[10px] bg-cyan-950/60 text-cyan-400 border border-cyan-800 px-2 py-0.5 rounded font-semibold">
+                ACTIVE
               </span>
             </div>
-            <h3 className="mt-4 text-lg font-semibold text-white group-hover:text-purple-400 transition-colors">
-              Configuration Management
+            <h3 className="mt-3 text-base font-semibold text-slate-100 group-hover:text-cyan-300 transition-colors">
+              Configuration Control Plane
             </h3>
-            <p className="mt-2 text-sm text-gray-500 leading-relaxed">
-              Define system-wide configurations, key-value rules, dependency behaviors, and modules. Keep your operational parameters synchronized.
+            <p className="mt-1 text-xs text-slate-400 leading-relaxed">
+              Define operational schemas, types, parameter values, and dependency trees with full CRUD support.
             </p>
-            <div className="mt-4 flex items-center gap-2 text-xs font-semibold text-purple-400">
-              Open Config Plane <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
+            <div className="mt-4 flex items-center gap-1.5 text-xs font-semibold text-cyan-400">
+              Open Control Plane <ArrowRight size={13} className="group-hover:translate-x-1 transition-transform" />
             </div>
           </Link>
 
@@ -77,56 +90,88 @@ export const Dashboard: React.FC = () => {
           <Link
             to="/core"
             testId="dashboard-card-core"
-            className="group block rounded-2xl border border-[#1a1c23] bg-[#0c0d12]/60 p-6 backdrop-blur-sm transition-all hover:-translate-y-1 hover:border-indigo-500/30 hover:bg-[#0c0d12]/80 hover:shadow-xl hover:shadow-indigo-500/5"
+            className="group block rounded border border-slate-800 bg-[#111827] p-5 transition-all hover:border-indigo-600 hover:bg-slate-900/60 shadow-sm"
           >
             <div className="flex items-center justify-between">
-              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-indigo-500/10 text-indigo-400 group-hover:bg-indigo-500 group-hover:text-white transition-all">
-                <Users size={22} />
+              <div className="flex h-10 w-10 items-center justify-center rounded bg-indigo-950/60 text-indigo-400 border border-indigo-800/60 group-hover:scale-105 transition-transform">
+                <Users size={20} />
               </div>
-              <span className="rounded-full bg-indigo-950/40 border border-indigo-500/30 px-2.5 py-0.5 text-xs text-indigo-300 font-medium">
-                Active
+              <span className="font-mono text-[10px] bg-indigo-950/60 text-indigo-400 border border-indigo-800 px-2 py-0.5 rounded font-semibold">
+                ACTIVE
               </span>
             </div>
-            <h3 className="mt-4 text-lg font-semibold text-white group-hover:text-indigo-400 transition-colors">
+            <h3 className="mt-3 text-base font-semibold text-slate-100 group-hover:text-indigo-300 transition-colors">
               Base Entities & Profiles
             </h3>
-            <p className="mt-2 text-sm text-gray-500 leading-relaxed">
-              Create and manage people, organizations, addresses, contacts, and relationships. Establish your base entities to link transactions and documents.
+            <p className="mt-1 text-xs text-slate-400 leading-relaxed">
+              Maintain master entity registry for persons, corporate organizations, addresses, contacts, and relationships.
             </p>
-            <div className="mt-4 flex items-center gap-2 text-xs font-semibold text-indigo-400">
-              Open Entity Setup <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
+            <div className="mt-4 flex items-center gap-1.5 text-xs font-semibold text-indigo-400">
+              Open Base Entities <ArrowRight size={13} className="group-hover:translate-x-1 transition-transform" />
             </div>
           </Link>
         </div>
       </div>
 
-      {/* Locked / Future Modules */}
-      <div className="space-y-4">
-        <h3 className="text-lg font-semibold tracking-wide text-gray-400">Future Operational Modules (Locked)</h3>
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          {[
-            { name: 'Finance Hub', icon: DollarSign, desc: 'Track cashflows, investment assets, loans, and credit card statement analysis.' },
-            { name: 'Trade Terminal', icon: TrendingUp, desc: 'Analyze trade setups, track portfolios, and sync transaction logs.' },
-            { name: 'Alerts & Reminders', icon: Bell, desc: 'Set up cron jobs, calendar events, warranty expirations, and triggers.' },
-            { name: 'Kanban & Planning', icon: LayoutGrid, desc: 'Organize chores, personal backlog, study targets, and milestone plans.' },
-          ].map((mod, idx) => {
-            const Icon = mod.icon;
-            return (
-              <div
-                key={idx}
-                className="relative overflow-hidden rounded-xl border border-gray-900 bg-[#0c0d12]/30 p-5 cursor-not-allowed group"
-              >
-                <div className="absolute top-0 right-0 rounded-bl bg-gray-900 border-l border-b border-gray-800 px-1.5 py-0.5 text-[8px] font-bold text-gray-600 uppercase tracking-widest">
-                  Soon
+      {/* Core ERP Modules Grid */}
+      <div className="space-y-3">
+        <h3 className="text-xs font-semibold uppercase tracking-widest text-slate-400 font-mono">
+          Core ERP Modules
+        </h3>
+        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
+          {CORE_MODULES.map((mod) => (
+            <Link
+              key={mod.id}
+              to={mod.path}
+              className="rounded border border-slate-800 bg-[#111827] p-4 hover:border-slate-700 hover:bg-slate-900/40 transition-all group flex flex-col justify-between"
+            >
+              <div>
+                <div className={`w-8 h-8 rounded ${mod.color} flex items-center justify-center text-white mb-3`}>
+                  {mod.icon}
                 </div>
-                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gray-900 text-gray-700">
-                  <Icon size={18} />
-                </div>
-                <h4 className="mt-3 text-sm font-semibold text-gray-500">{mod.name}</h4>
-                <p className="mt-1 text-xs text-gray-700 leading-normal">{mod.desc}</p>
+                <h4 className="text-sm font-semibold text-slate-200 group-hover:text-cyan-300 transition-colors">
+                  {mod.label}
+                </h4>
+                <p className="text-[11px] text-slate-400 mt-1">
+                  Live KPI metrics & transactions.
+                </p>
               </div>
-            );
-          })}
+              <span className="text-[10px] font-mono text-cyan-500 mt-3 flex items-center gap-1">
+                Explore →
+              </span>
+            </Link>
+          ))}
+        </div>
+      </div>
+
+      {/* Operations ERP Modules Grid */}
+      <div className="space-y-3">
+        <h3 className="text-xs font-semibold uppercase tracking-widest text-slate-400 font-mono">
+          Operations & Lifecycle Modules
+        </h3>
+        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+          {OPS_MODULES.map((mod) => (
+            <Link
+              key={mod.id}
+              to={mod.path}
+              className="rounded border border-slate-800 bg-[#111827] p-4 hover:border-slate-700 hover:bg-slate-900/40 transition-all group flex flex-col justify-between"
+            >
+              <div>
+                <div className={`w-8 h-8 rounded ${mod.color} flex items-center justify-center text-white mb-3`}>
+                  {mod.icon}
+                </div>
+                <h4 className="text-sm font-semibold text-slate-200 group-hover:text-cyan-300 transition-colors">
+                  {mod.label}
+                </h4>
+                <p className="text-[11px] text-slate-400 mt-1">
+                  Tracking, events, & operational records.
+                </p>
+              </div>
+              <span className="text-[10px] font-mono text-cyan-500 mt-3 flex items-center gap-1">
+                Explore →
+              </span>
+            </Link>
+          ))}
         </div>
       </div>
     </div>

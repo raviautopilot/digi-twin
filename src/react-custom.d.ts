@@ -4,5 +4,6 @@ import 'react';
 declare module 'react' {
   interface HTMLAttributes<T> {
     testId?: string;
+    testid?: string;
   }
 }

@@ -4,6 +4,7 @@ import { Layout } from './components/Layout';
 import { Dashboard } from './pages/Dashboard';
 import { ConfigPage } from './pages/ConfigPage';
 import { CorePage } from './pages/CorePage';
+import { ModulePage } from './pages/ModulePage';
 
 // Initialize TanStack Query Client
 const queryClient = new QueryClient({
@@ -24,6 +25,7 @@ function App() {
             <Route path="/" element={<Dashboard />} />
             <Route path="/config" element={<ConfigPage />} />
             <Route path="/core" element={<CorePage />} />
+            <Route path="/modules/:moduleId" element={<ModulePage />} />
             {/* Fallback routing */}
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
