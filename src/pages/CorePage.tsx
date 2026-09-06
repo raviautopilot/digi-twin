@@ -136,7 +136,8 @@ export const CorePage: React.FC = () => {
 
   // Mutations
   const createEntity = useCreateEntity();
-  const updateEntity = useUpdateEntity();
+  const _updateEntity = useUpdateEntity();
+  void _updateEntity;
   const deleteEntity = useDeleteEntity();
   const createPerson = useCreatePerson();
   const updatePerson = useUpdatePerson();
@@ -228,7 +229,7 @@ export const CorePage: React.FC = () => {
     if (isPerson) {
       const p = people?.find(x => x.entity_id === entityId);
       if (!p) return;
-      setEditingEntity({ id: entityId, isPerson: true, detailId: p.id });
+      setEditingEntity({ id: entityId, isPerson: true, detailId: p.id ?? 0 });
       setOnboardType('PERSON');
       rPerson({
         first_name: p.first_name || '',
@@ -244,7 +245,7 @@ export const CorePage: React.FC = () => {
     } else {
       const o = organizations?.find(x => x.entity_id === entityId);
       if (!o) return;
-      setEditingEntity({ id: entityId, isPerson: false, detailId: o.id });
+      setEditingEntity({ id: entityId, isPerson: false, detailId: o.id ?? 0 });
       setOnboardType('ORGANIZATION');
       rOrg({
         legal_name: o.legal_name || '',

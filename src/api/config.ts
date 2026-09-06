@@ -72,7 +72,10 @@ export const useDeleteModule = () => {
     mutationFn: async (id: number) => {
       await configClient.delete(`/config/modules/${id}`);
     },
-    onSuccess: () => {
+    onSuccess: (_, id) => {
+      queryClient.setQueriesData<CfgModule[]>({ queryKey: ['config', 'modules'] }, (old) =>
+        old ? old.filter((m) => m.id !== id) : []
+      );
       queryClient.invalidateQueries({ queryKey: ['config', 'modules'] });
     },
   });
@@ -126,7 +129,10 @@ export const useDeleteType = () => {
     mutationFn: async (id: number) => {
       await configClient.delete(`/config/types/${id}`);
     },
-    onSuccess: () => {
+    onSuccess: (_, id) => {
+      queryClient.setQueriesData<CfgType[]>({ queryKey: ['config', 'types'] }, (old) =>
+        old ? old.filter((t) => t.id !== id) : []
+      );
       queryClient.invalidateQueries({ queryKey: ['config', 'types'] });
     },
   });
@@ -180,7 +186,10 @@ export const useDeleteValue = () => {
     mutationFn: async (id: number) => {
       await configClient.delete(`/config/values/${id}`);
     },
-    onSuccess: () => {
+    onSuccess: (_, id) => {
+      queryClient.setQueriesData<CfgValue[]>({ queryKey: ['config', 'values'] }, (old) =>
+        old ? old.filter((v) => v.id !== id) : []
+      );
       queryClient.invalidateQueries({ queryKey: ['config', 'values'] });
     },
   });
@@ -234,7 +243,10 @@ export const useDeleteDependency = () => {
     mutationFn: async (id: number) => {
       await configClient.delete(`/config/dependencies/${id}`);
     },
-    onSuccess: () => {
+    onSuccess: (_, id) => {
+      queryClient.setQueriesData<CfgDependency[]>({ queryKey: ['config', 'dependencies'] }, (old) =>
+        old ? old.filter((d) => d.id !== id) : []
+      );
       queryClient.invalidateQueries({ queryKey: ['config', 'dependencies'] });
     },
   });
